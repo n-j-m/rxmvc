@@ -6,7 +6,7 @@ var mergeCommon = merge.bind(null, common);
 var BuildConstants = require("./build-constants");
 
 module.exports = mergeCommon({
-  devTool: "eval",
+  devTool: "source-map",
   entry: [
     "webpack-dev-server/client?http://localhost:3000"
   ],
