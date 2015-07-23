@@ -1,7 +1,11 @@
-import Rx from "rx";
+import { Rx } from "@cycle/core";
+import { Seq } from "immutable";
 
 export function makeGameState(order, pressed = []) {
-  return { order, pressed };
+  return {
+    order: new Seq(order),
+    pressed: new Seq(pressed)
+  };
 }
 
 Rx.Observable.prototype.takeWhileInclusive = function takeWhileInclusive(predicate) {

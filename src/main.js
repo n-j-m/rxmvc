@@ -1,11 +1,20 @@
+import Cycle from "@cycle/core";
+import { h, makeDOMDriver } from "@cycle/dom";
 
+import { CustomRx as Rx } from "./common";
 
 function main() {
-  let content = document.createElement("div");
+  let requests = {
+    DOM: Rx.Observable.just(
+      h("div.jumbotron", [
+        h("h1", "Hello!")
+      ])
+    )
+  };
 
-  document.body.appendChild(content);
-
-  content.innerHTML = "<div class='jumbotron'><h1>Hello!</h1></div>";
+  return requests;
 }
 
-main();
+Cycle.run(main, {
+  DOM: makeDOMDriver("#app")
+});
