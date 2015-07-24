@@ -1,15 +1,17 @@
 import Cycle from "@cycle/core";
-import { h, makeDOMDriver } from "@cycle/dom";
+import { makeDOMDriver } from "@cycle/dom";
 
-import { CustomRx as Rx } from "./common";
+import { intent } from "./intent";
+import { model } from "./model";
+import { view } from "./view";
 
-function main() {
+function main({DOM}) {
+  let actions = intent(DOM);
+  let state$ = model(actions);
+  let vtree$ = view(state$);
+
   let requests = {
-    DOM: Rx.Observable.just(
-      h("div.jumbotron", [
-        h("h1", "Hello!")
-      ])
-    )
+    DOM: vtree$
   };
 
   return requests;
