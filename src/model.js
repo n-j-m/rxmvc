@@ -1,36 +1,29 @@
-import { CustomRx as Rx } from "./common";
+import { Rx } from "@cycle/core";
+import { Map } from "immutable";
 
-import { range, randomInt } from "./utils";
-import { makeGameState } from "./common";
+export function model(actions, responses) {
+  return Rx.Observable.combineLatest(
+    actions.clicks$
+      .startWith(0)
+      .scan((total, value) => total + value),
+    responses.userList$
+      .startWith([]),
+    (index, userList) => {
+      if (index < 0) {
+        index = userList.length + index;
+      }
+      let user = "";
+      if (userList.length) {
+        user = userList[index] ? userList[index].login : "";
+      }
 
-export function newGameStream() {
-  let subject$ = new Rx.Subject();
-  let observable$ = subject$.map(() =>
-    range(4).map(() => randomInt(4)
-  )
-  .share();
-
-  return Rx.Subject.create(subject$, observable$);
-}
-
-export function gameResultStream(newGame$) {
-  let number$ = new Rx.Subject();
-  let observable$ = newGame$
-    .map(order =>
-      number$
-        .scan(makeGameState(order), (state, value) =>
-          makeGameState(state.order, state.pressed.concat([value]))
-        )
-        .takeWhileInclusive(state => {
-          let prefix = state.order.slice(0, state.pressed.length);
-          return state.pressed.equals(prefix);
-        })
-        .take(order.size)
-        .last()
-        .takeUntil(newGame$)
-    )
-    .concatAll()
-    .share();
-
-  return Rx.Subject.create(number$, observable$);
+      /*eslint-disable no-undef*/
+      window.state = {index, userList, user};
+      /*eslint-enable no-undef*/
+      return new Map({
+        index,
+        userList,
+        user
+      });
+    });
 }

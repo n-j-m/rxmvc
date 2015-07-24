@@ -1,20 +1,27 @@
 import Cycle from "@cycle/core";
-import { h, makeDOMDriver } from "@cycle/dom";
+import { makeDOMDriver } from "@cycle/dom";
+import { makeHTTPDriver } from "@cycle/http";
 
-import { CustomRx as Rx } from "./common";
+import { view } from "./view";
+import { model } from "./model";
+import { intent } from "./intent";
+import { request } from "./request";
 
-function main() {
+function main({ DOM, HTTP }) {
+  let actions = intent(DOM);
+  let responses = request(actions, HTTP);
+
+  let vtree$ = view(model(actions, responses));
+
   let requests = {
-    DOM: Rx.Observable.just(
-      h("div.jumbotron", [
-        h("h1", "Hello!")
-      ])
-    )
+    DOM: vtree$,
+    HTTP: responses.getUserList$
   };
 
   return requests;
 }
 
 Cycle.run(main, {
-  DOM: makeDOMDriver("#app")
+  DOM: makeDOMDriver("#app"),
+  HTTP: makeHTTPDriver()
 });
