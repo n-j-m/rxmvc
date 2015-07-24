@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import { CustomRx as Rx } from "./common";
-
-export function intent(DOM) {
-  let newGameClick$ = DOM.get("#new-game", "click")
-    .flatMap(() => Rx.Observable.just(null));
-  let numberClick$ = DOM.get(".number-button", "click")
-    .flatMap((ev) => Rx.Observable.just(ev.target.value));
-
-  return {
-    newGameClick$,
-    numberClick$
-=======
 import { Rx } from "@cycle/core";
 
 export function intent(DOM) {
@@ -27,6 +14,5 @@ export function intent(DOM) {
         return ev;
       })
       .startWith("refresh click")
->>>>>>> e34b2954b80df803b94dc9cf648ae1a3f416d98f
   };
 }
