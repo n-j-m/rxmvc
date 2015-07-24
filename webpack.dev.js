@@ -16,7 +16,10 @@ module.exports = mergeCommon({
     ]
   },
   plugins: [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({
+      GITHUB_TOKEN: JSON.stringify(process.env.PLAYGROUND_TOKEN)
+    })
   ],
   devServer: {
     stats: {
