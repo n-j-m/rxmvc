@@ -12,6 +12,7 @@ export function request({ refresh$ }, HTTP) {
     .map(res => res.body);
 
   let getUserList$ = refresh$
+    .startWith("refresh click")
     .map(() => {
       let headers = {};
       if (TOKEN) {

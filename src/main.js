@@ -5,17 +5,19 @@ import { makeHTTPDriver } from "@cycle/http";
 import { view } from "./view";
 import { model } from "./model";
 import { intent } from "./intent";
-import { request } from "./request";
+import { httpIntent } from "./httpIntent";
+import { httpModel } from "./httpModel";
 
 function main({ DOM, HTTP }) {
   let actions = intent(DOM);
-  let responses = request(actions, HTTP);
+  let httpActions = httpIntent(actions);
+  let httpState = httpModel(HTTP);
 
-  let vtree$ = view(model(actions, responses));
+  let vtree$ = view(model(actions, httpState));
 
   let requests = {
     DOM: vtree$,
-    HTTP: responses.getUserList$
+    HTTP: httpActions.request$
   };
 
   return requests;

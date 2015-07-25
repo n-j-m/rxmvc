@@ -15,7 +15,8 @@ module.exports = mergeCommon({
     new webpack.DefinePlugin({
       "process.env": {
         "NODE_ENV": JSON.stringify("production")
-      }
+      },
+      GITHUB_TOKEN: JSON.stringify(process.env.PLAYGROUND_TOKEN)
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

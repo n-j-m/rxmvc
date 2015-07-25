@@ -1,24 +1,23 @@
 import { Rx } from "@cycle/core";
 import { Map } from "immutable";
 
-export function model(actions, responses) {
+export function model(appActions, httpActions) {
   return Rx.Observable.combineLatest(
-    actions.clicks$
+    appActions.clicks$
       .startWith(0)
       .scan((total, value) => total + value),
-    responses.userList$
+    httpActions.response$
       .startWith([]),
     (index, userList) => {
+      index = index % (userList.length - 1);
       if (index < 0) {
-        index = userList.length + index;
+        index = index + (userList.length - 1);
       }
-      let user = "";
+      let user = null;
       if (userList.length) {
-        user = userList[index] ? userList[index].login : "";
+        user = userList[index];
       }
-      /*eslint-disable no-undef*/
-      window.state = {index, userList, user};
-      /*eslint-enable no-undef*/
+
       return new Map({
         index,
         userList,

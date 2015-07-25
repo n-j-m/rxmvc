@@ -8,11 +8,6 @@ export function intent(DOM) {
       DOM.get(".decrement", "click")
         .map(() => -1)
     ),
-    refresh$: DOM.get(".refresh", "click")
-      .map((ev) => {
-        console.log("click!");
-        return ev;
-      })
-      .startWith("refresh click")
+    refreshClick$: DOM.get(".refresh", "click")
   };
 }
